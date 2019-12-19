@@ -27,10 +27,10 @@ void entry() {
     if (pressed(BTN_RELOAD)) {
         // reload save
         if (down(BTN_ALT)) {
-            if (down(BTN_UP) || * (int*) save_save == 0) {
+            if (down(BTN_UP) || *(int*)save_save == 0) {
                 // prevent stack overflow from giga memcpy
                 for (i = 0; i < 0x200000; i += 0x8000) {
-                    memcpy((void*) ((int) save_save + i), (void*) ((int) savedata_buf + i), 0x8000);
+                    memcpy((void*)((int)save_save + i), (void*)((int)savedata_buf + i), 0x8000);
                 }
             }
 
