@@ -2,11 +2,11 @@
 
 // binds
 #define BTN_ACTION (BTN_L2 | BTN_R2)
-#define BTN_ALT BTN_L3
+#define BTN_ALT BTN_R1
 
-#define BTN_RELOAD BTN_R3
-#define BTN_SAVE BTN_L1
-#define BTN_LOAD BTN_R1
+#define BTN_RELOAD BTN_CRO
+#define BTN_SAVE BTN_SQU
+#define BTN_LOAD BTN_CIR
 
 // variables
 #define i (*((int*)0xD9FEFC))
@@ -19,35 +19,53 @@
 
 
 void entry() {
+    // L2 + R2
     if (!down(BTN_ACTION)) {
         return;
     }
 
-    // reload planet
-    if (pressed(BTN_RELOAD)) {
-        // reload save
-        if (down(BTN_ALT)) {
-            if (down(BTN_UP) || *(int*)save_save == 0) {
-                // prevent stack overflow from giga memcpy
-                for (i = 0; i < 0x200000; i += 0x8000) {
-                    memcpy((void*)((int)save_save + i), (void*)((int)savedata_buf + i), 0x8000);
-                }
+    // R1
+    if (down(BTN_ALT)) {
+        // SQUARE or CIRCLE and not saved
+        if (pressed(BTN_SAVE) || (pressed(BTN_LOAD) && *(int*)save_save == 0)) {
+            // prevent stack overflow from giga memcpy
+            for (i = 0; i < 0x200000; i += 0x8000) {
+                memcpy((void*)((int)save_save + i), (void*)((int)savedata_buf + i), 0x8000);
             }
+        }
 
+        // SQUARE or CIRCLE
+        if (pressed(BTN_SAVE) || pressed(BTN_LOAD)) {
             perform_load(0, save_save);
         }
-        // just reload planet
-        else {
-            destination_planet = current_planet;
-            should_load = 1;
-        }
+
+        goto clear;
     }
-    // save pos
-    else if (pressed(BTN_SAVE)) {
+
+    // CROSS
+    if (pressed(BTN_RELOAD)) {
+        destination_planet = current_planet;
+        should_load = 1;
+
+        goto clear;
+    }
+
+    // SQUARE
+    if (pressed(BTN_SAVE)) {
         memcpy(save_pos, &player_pos, 0x20);
+
+        goto clear;
     }
-    // load pos
-    else if (pressed(BTN_LOAD)) {
+
+    // CIRCLE
+    if (pressed(BTN_LOAD)) {
         memcpy(&player_pos, save_pos, 0x20);
+
+        goto clear;
     }
+
+clear:
+    down_buttons = BTN_ACTION | (BTN_ALT & down_buttons);
+    pressed_buttons = 0;
+    released_buttons = 0;
 }

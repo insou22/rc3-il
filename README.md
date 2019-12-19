@@ -11,11 +11,11 @@ A timer is planned; I'll do it at some point.
 
 ### Usage
 #### Hotkeys
-- `L2+R2` held, then `L1` pressed: save position
-- `L2+R2` held, then `R1` pressed: load position
-- `L2+R2` held, then `R3` pressed: reload planet
-- `L2+R2+L3` held, then `R3` pressed: reload the set-aside savefile
-- `L2+R2+L3+Up` held, then `R3` pressed: set aside current savefile, then reload it
+- `L2 + R2` held, then `SQUARE` pressed: save position
+- `L2 + R2` held, then `CIRCLE` pressed: load position
+- `L2 + R2` held, then `CROSS` pressed: reload planet
+- `L2 + R2 + R1` held, then `CIRCLE` pressed: reload the set-aside savefile
+- `L2 + R2 + R1` held, then `SQUARE` pressed: set aside current savefile, then reload it
 
 If no savefile has been set aside and you attempt to reload it, it will work like you also had `Up` held.
 
